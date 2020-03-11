@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  devtop:
+    tmpfs:
+      - /tmp
+      - /run
+    cap_add:
+      - SYS_ADMIN
+    container_name: devtop_1
+    image: centos:7
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ~/.config/pulse:/home/pulseaudio/.config/pulse
+    ports:
+      # VNC GUI client ports
+      - "5900-5904:5900-5904"
+      # xRDP port
+      - "3389:3389"
+    environment:
+      - DISPLAY=docker.for.mac.host.internal:0
+      - PULSE_SERVER=docker.for.mac.localhost
+    command: ["/sbin/init"]

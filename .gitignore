@@ -1,0 +1,7 @@
+roles/*
+!roles/
+!roles/requirements.yml
+!roles/ansible-role*
+!roles/ansible-role*/**
+*.retry
+.idea/

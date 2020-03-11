@@ -1,0 +1,28 @@
+---
+- name: robertdebock.bootstrap
+  src: git+https://github.com/robertdebock/ansible-role-bootstrap.git
+  scm: git
+
+- name: robertdebock.core_dependencies
+  src: git+https://github.com/robertdebock/ansible-role-core_dependencies.git
+  scm: git
+
+- name: robertdebock.desktop
+  src: git+https://github.com/robertdebock/ansible-role-desktop.git
+  scm: git
+
+- name: robertdebock.users
+  src: git+https://github.com/robertdebock/ansible-role-users.git
+  scm: git
+
+- name: robertdebock.tigervnc
+  src: git+https://github.com/robertdebock/ansible-role-tigervnc.git
+  scm: git
+
+- name: robertdebock.xrdp
+  src: git+https://github.com/robertdebock/ansible-role-xrdp.git
+  scm: git
+
+- name: robertdebock.epel
+  src: git+https://github.com/robertdebock/ansible-role-epel.git
+  scm: git

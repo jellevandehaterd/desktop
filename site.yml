@@ -1,0 +1,75 @@
+---
+- name: Bootstrap
+  hosts: all
+  become: true
+  gather_facts: no
+
+  tasks:
+    - include_role:
+        name: ansible-role-bootstrap
+    - include_role:
+        name: ansible-role-core_dependencies
+
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: yes
+  vars:
+    username: vncuser
+    group: vncgroup
+    password: vncpass
+    desktop: mate
+  tasks:
+    - include_role:
+        name: ansible-role-epel
+    - include_role:
+        name: ansible-role-desktop
+      vars:
+        desktop: "{{ desktop }}"
+    - include_role:
+        name: ansible-role-users
+      vars:
+        users_group_list:
+          - name: vncgroup
+        users_user_list:
+          - name: "{{ username }}"
+            password: "{{ password | password_hash('sha512', 'mysecretsalt') }}"
+            sudo_options: "ALL=(ALL) NOPASSWD: ALL"
+            group: "{{ group}}"
+    - include_role:
+        name: ansible-role-xrdp
+      vars:
+        xrdp_configuration:
+          - option: encrypt_level
+            section: Globals
+            value: high
+          - option: channel_code
+            section: Globals
+            value: 1
+    - name: ensure .Xclients file is present
+      copy:
+        content: mate-session
+        dest: "/home/{{ username }}/.Xclients"
+        owner: "{{ username }}"
+        group: "{{ group }}"
+        mode: "a+x"
+    - include_role:
+        name: ansible-role-tigervnc
+      vars:
+        tigervnc_username: "{{ username }}"
+        tigervnc_password: "{{ password }}"
+        tigervnc_group: "{{ group }}"
+        tigervnc_desktop_session: "{{ desktop }}-session"
+        tigervnc_packages:
+          - tigervnc-server
+          - xorg-x11-font-utils
+          - xorg-x11-server-utils
+          - xorg-x11-server-common
+          - xorg-x11-server-Xorg
+          - xorg-x11-xauth
+          - xorg-x11-xinit
+    - name: ensure NetworkManager is enabled
+      service:
+        name: NetworkManager
+        enabled: yes
+        state: started
