@@ -6,9 +6,9 @@
 
   tasks:
     - include_role:
-        name: ansible-role-bootstrap
+        name: robertdebock.bootstrap
     - include_role:
-        name: ansible-role-core_dependencies
+        name: robertdebock.core_dependencies
 
 - name: Converge
   hosts: all
@@ -21,13 +21,13 @@
     desktop: mate
   tasks:
     - include_role:
-        name: ansible-role-epel
+        name: robertdebock.epel
     - include_role:
-        name: ansible-role-desktop
+        name: robertdebock.desktop
       vars:
         desktop: "{{ desktop }}"
     - include_role:
-        name: ansible-role-users
+        name: robertdebock.users
       vars:
         users_group_list:
           - name: vncgroup
@@ -37,7 +37,7 @@
             sudo_options: "ALL=(ALL) NOPASSWD: ALL"
             group: "{{ group}}"
     - include_role:
-        name: ansible-role-xrdp
+        name: robertdebock.xrdp
       vars:
         xrdp_configuration:
           - option: encrypt_level
@@ -54,7 +54,7 @@
         group: "{{ group }}"
         mode: "a+x"
     - include_role:
-        name: ansible-role-tigervnc
+        name: robertdebock.tigervnc
       vars:
         tigervnc_username: "{{ username }}"
         tigervnc_password: "{{ password }}"
